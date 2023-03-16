@@ -1,5 +1,6 @@
 ---
 - hosts: all
+  name: ex2
   become: true
   name: example2
   tasks:

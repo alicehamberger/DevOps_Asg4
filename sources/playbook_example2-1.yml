@@ -1,5 +1,6 @@
 ---
 - hosts: web-server1
+  name: ex21
   become: true
   tasks:
     - name: stop apache2

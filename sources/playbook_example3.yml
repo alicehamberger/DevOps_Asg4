@@ -1,5 +1,6 @@
 ---
 - hosts: web-server1
+  name: ex3
   tasks:
     - name: generate secret
       ansible.builtin.shell: set -o pipefail && date +%s | sha256sum | base64 | head -c 32 ; echo
