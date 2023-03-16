@@ -1,0 +1,14 @@
+[web-server1]
+ec2-xx-xx-xxx-xxx.compute-1.amazonaws.com
+
+[web-server2]
+ec2-xx-xxx-xxx-xxx.compute-1.amazonaws.com
+
+[cluster:children]
+web-server1
+web-server2
+
+[cluster:vars]
+ansible_ssh_user=ubuntu
+ansible_ssh_private_key_file=/home/ubuntu/lab_user.pem
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
