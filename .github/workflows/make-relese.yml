@@ -1,0 +1,53 @@
+name: Build pdf
+
+on:
+  push:
+    tags:
+      - '*'
+env:
+  GITHUB_TOKEN: ${{ github.token }}
+  URL: https://raw.githubusercontent.com/DevOps-and-Cloud-based-Software/week4/${{ github.ref_name }}
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    name: Publish Document
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+
+      - name: Replace links
+        run: |
+          cp README.md README_WITH_LINKS.md 
+          sed -i -e "s#src=\"/images/#src=\"$URL/images/#g" README_WITH_LINKS.md 
+          for file in sources/*; do sed -i -e "s#($file)#($URL/$file)#g" README_WITH_LINKS.md ; done
+
+      - name: urls-checker
+        uses: urlstechie/urlchecker-action@master
+        with:
+          file_types: .md,yaml,json
+          retry_count: 3
+          exclude_patterns: http://IP:NODE_PORT,http://localhost,https://virtserver.swaggerhub.com/,http://IP,http://MATER-IP:5000/
+
+      - name: Publish PDF Document
+        uses: shrink/actions-document-publish@v1
+        id: publish-document
+        with:
+          sources: 'README_WITH_LINKS.md'
+
+
+
+      - name: Upload Document
+        uses: actions/upload-artifact@v2
+        id: upload-document
+        with:
+          name: 'week4Lab'
+          path: ${{ steps.publish-document.outputs.pdf }}
+
+      - name: Upload README_WITH_LINKS.md
+        uses: actions/upload-artifact@v2
+        id: upload-readme-file
+        with:
+          name: 'README_WITH_LINKS.md'
+          path: README_WITH_LINKS.md

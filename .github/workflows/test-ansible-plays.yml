@@ -1,0 +1,23 @@
+name: deploy ansible
+
+on:
+  push:
+
+
+jobs:
+  build:
+    name: Test ${{ matrix.ansible-files }}
+    runs-on: 'ubuntu-latest'
+    strategy:
+      fail-fast: false
+      matrix:
+        ansible-files: ['playbook_example1.yml', 'playbook_example2.yml','playbook_example2-1.yml','playbook_example3.yml','playbook_example4.yml']
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Run ansible-lint
+        uses: ansible/ansible-lint-action@main
+        with:
+          path: "sources/${{ matrix.ansible-files }}"

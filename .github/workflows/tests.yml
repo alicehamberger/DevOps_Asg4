@@ -1,0 +1,19 @@
+name: test
+
+on:
+  [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: Test URLs
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: urls-checker
+        uses: urlstechie/urlchecker-action@master
+        with:
+          file_types: .md,yaml,json
+          retry_count: 3
+          exclude_patterns: http://IP:NODE_PORT,http://localhost,https://virtserver.swaggerhub.com/,http://IP,http://MATER-IP:5000/
